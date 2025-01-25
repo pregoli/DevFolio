@@ -1,5 +1,5 @@
 import type { Post } from '../types';
- 
+
 export const samplePosts: Post[] = [
   {
     id: '1',
