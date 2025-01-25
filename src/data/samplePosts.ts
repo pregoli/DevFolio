@@ -14,6 +14,12 @@ export const samplePosts: Post[] = [
     },
     tags: ['DDD', 'Architecture', 'Best Practices'],
     category: 'Architecture',
+    series: {
+      id: '1',
+      name: 'Domain-Driven Design',
+      partNumber: 1,
+      totalParts: 5,
+    },
   },
   {
     id: '2',
@@ -28,6 +34,12 @@ export const samplePosts: Post[] = [
     },
     tags: ['Event-Driven', 'Architecture', '.NET'],
     category: 'Architecture',
+    series: {
+      id: '2',
+      name: 'Event-Driven Architecture',
+      partNumber: 1,
+      totalParts: 3,
+    },
   },
   {
     id: '3',

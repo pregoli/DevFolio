@@ -32,14 +32,18 @@ function App() {
       case 'article':
         return <ArticleDetail />;
       default:
+        const [latestPost, ...otherPosts] = samplePosts;
         return (
           <>
             <section className="mb-16">
               <h1 className="text-4xl font-bold mb-8 text-gray-900 dark:text-white">
                 Latest Articles
               </h1>
-              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {samplePosts.map((post) => (
+              <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                <div className="lg:col-span-2">
+                  <PostCard post={latestPost} layout="featured" />
+                </div>
+                {otherPosts.map((post) => (
                   <PostCard key={post.id} post={post} />
                 ))}
               </div>
@@ -69,7 +73,7 @@ function App() {
         <footer className="bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 mt-auto">
           <div className="container mx-auto px-4 py-8 max-w-7xl">
             <p className="text-center text-gray-600 dark:text-gray-400">
-              © {new Date().getFullYear()} 3XT. All rights reserved.
+              © {new Date().getFullYear()} DEV~FOLIO. All rights reserved.
             </p>
           </div>
         </footer>

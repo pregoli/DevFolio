@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Menu, Moon, Sun, Search, X } from 'lucide-react';
 import { MobileMenu } from './MobileMenu';
+import { SearchOverlay } from './SearchOverlay';
+import { Logo } from './Logo';
 import { samplePosts } from '../data/samplePosts';
 
 interface HeaderProps {
@@ -11,9 +13,24 @@ interface HeaderProps {
 
 export function Header({ toggleDarkMode, isDarkMode, onNavigate }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<typeof samplePosts>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsSearching(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -46,25 +63,26 @@ export function Header({ toggleDarkMode, isDarkMode, onNavigate }: HeaderProps) 
     <>
       <header className="sticky top-0 z-40 w-full border-b bg-white dark:bg-black border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center justify-between">
+          <div className="flex h-14 sm:h-16 items-center justify-between">
             <div className="flex items-center">
               <button 
                 onClick={() => setIsMobileMenuOpen(true)} 
                 className="p-2"
               >
-                <Menu className="h-6 w-6 text-gray-900 dark:text-white" />
+                <Menu className="h-5 w-5 sm:h-6 sm:w-6 text-gray-900 dark:text-white" />
               </button>
               <a 
                 href="/" 
                 onClick={(e) => handleNavigation('home', e)}
-                className="ml-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+                className="ml-2 sm:ml-4"
               >
-                3XT
+                <Logo />
               </a>
             </div>
             
-            <div className="flex-1 max-w-xl mx-4">
-              <div className="relative">
+            {/* Desktop Search */}
+            <div className="hidden md:block flex-1 max-w-xl mx-4">
+              <div className="relative" ref={searchRef}>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <input
@@ -72,7 +90,7 @@ export function Header({ toggleDarkMode, isDarkMode, onNavigate }: HeaderProps) 
                     placeholder="Search articles..."
                     value={searchQuery}
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="w-full pl-10 pr-10 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                    className="w-full pl-10 pr-10 py-2 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                   />
                   {searchQuery && (
                     <button
@@ -85,7 +103,7 @@ export function Header({ toggleDarkMode, isDarkMode, onNavigate }: HeaderProps) 
                 </div>
                 
                 {isSearching && (
-                  <div className="absolute w-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg max-h-96 overflow-y-auto">
+                  <div className="absolute w-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto">
                     {searchResults.length > 0 ? (
                       searchResults.map(post => (
                         <a
@@ -108,10 +126,19 @@ export function Header({ toggleDarkMode, isDarkMode, onNavigate }: HeaderProps) 
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              {/* Mobile Search Button */}
+              <button
+                onClick={() => setIsSearchOpen(true)}
+                className="md:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+                aria-label="Search"
+              >
+                <Search className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              </button>
+
               <button
                 onClick={toggleDarkMode}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
                 aria-label="Toggle dark mode"
               >
                 {isDarkMode ? (
@@ -124,6 +151,7 @@ export function Header({ toggleDarkMode, isDarkMode, onNavigate }: HeaderProps) 
           </div>
         </div>
       </header>
+
       <MobileMenu 
         isOpen={isMobileMenuOpen} 
         onClose={() => setIsMobileMenuOpen(false)} 
@@ -131,6 +159,11 @@ export function Header({ toggleDarkMode, isDarkMode, onNavigate }: HeaderProps) 
           onNavigate(page);
           setIsMobileMenuOpen(false);
         }}
+      />
+
+      <SearchOverlay 
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
       />
     </>
   );

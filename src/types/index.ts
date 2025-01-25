@@ -1,3 +1,11 @@
+export interface Series {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  color: string;
+}
+
 export interface Post {
   id: string;
   title: string;
@@ -11,6 +19,12 @@ export interface Post {
   };
   tags: string[];
   category: string;
+  series?: {
+    id: string;
+    name: string;
+    partNumber: number;
+    totalParts: number;
+  };
 }
 
 export interface Comment {
