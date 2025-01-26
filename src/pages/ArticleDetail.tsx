@@ -1,20 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { samplePosts } from '../data/samplePosts';
 import { series } from '../data/series';
 import type { Post } from '../types';
+import { Menu, Clock, Eye, Share2 } from 'lucide-react';
 
 export function ArticleDetail() {
-  const [article, setArticle] = React.useState<Post | null>(null);
+  const [article, setArticle] = useState<Post | null>(null);
+  const [activeSection, setActiveSection] = useState<string>('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showShareTooltip, setShowShareTooltip] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const slug = window.location.pathname.split('/post/')[1];
     const foundArticle = samplePosts.find(post => post.slug === slug);
     setArticle(foundArticle || null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-20% 0px -80% 0px' }
+    );
+
+    const sections = document.querySelectorAll('h2[id]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
   }, []);
 
   if (!article) {
     return (
-      <div className="max-w-3xl mx-auto py-8">
+      <div className="max-w-3xl mx-auto py-8 px-4">
         <p className="text-gray-900 dark:text-white">Article not found</p>
       </div>
     );
@@ -24,55 +44,198 @@ export function ArticleDetail() {
     ? series.find(s => s.id === article.series?.id)?.color 
     : undefined;
 
+  const createHeadingId = (text: string) => 
+    text.toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+
+  const headings = article.content
+    .match(/^## (.*$)/gm)
+    ?.map(heading => {
+      const title = heading.replace('## ', '');
+      return {
+        id: createHeadingId(title),
+        title
+      };
+    }) || [];
+
+  const TableOfContents = ({ className = '' }: { className?: string }) => (
+    <nav className={`space-y-1 ${className}`} aria-label="Table of Contents">
+      <p className="text-sm font-medium text-gray-900 dark:text-white mb-4">
+        Table of Contents
+      </p>
+      {headings.map(heading => (
+        <a
+          key={heading.id}
+          href={`#${heading.id}`}
+          onClick={(e) => {
+            e.preventDefault();
+            const element = document.getElementById(heading.id);
+            if (element) {
+              const yOffset = -100;
+              const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+              window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+            setIsMobileMenuOpen(false);
+          }}
+          className={`group flex items-center py-2 px-3 text-sm transition-all duration-200 ${
+            activeSection === heading.id
+              ? 'text-gray-900 dark:text-white font-medium'
+              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <span className="w-1.5 h-1.5 bg-gray-400 dark:bg-gray-600 group-hover:bg-gray-600 dark:group-hover:bg-gray-400 transition-colors rounded-full" />
+            {heading.title}
+          </div>
+        </a>
+      ))}
+    </nav>
+  );
+
   return (
-    <article className="max-w-3xl mx-auto py-8">
-      <div className="mb-8">
-        {/* Series indicator */}
-        {article.series && (
-          <div 
-            className="mb-4"
-            style={{ '--series-color': seriesColor } as any}
-          >
-            <div className="flex items-center space-x-2">
-              <div 
-                className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: seriesColor }}
-              />
-              <span className="text-sm font-medium" style={{ color: seriesColor }}>
-                {article.series.name}
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-black dark:to-gray-900">
+      {/* Hero Section */}
+      <div className="relative py-8 sm:py-16 lg:py-24">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-gray-100/70 via-transparent to-transparent dark:from-white/5 blur-3xl" />
+        </div>
+
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6">
+          {/* Meta Info */}
+          <div className="flex flex-wrap items-center gap-4 mb-6">
+            <div className="flex items-center gap-4 sm:gap-6 text-sm">
+              <span className="flex items-center gap-2 bg-white/50 dark:bg-white/5 backdrop-blur-sm px-3 py-1.5">
+                <Clock className="w-4 h-4" />
+                15 min read
+              </span>
+              <span className="flex items-center gap-2 bg-white/50 dark:bg-white/5 backdrop-blur-sm px-3 py-1.5">
+                <Eye className="w-4 h-4" />
+                1.2k views
               </span>
             </div>
           </div>
-        )}
 
-        {/* Category and Tags */}
-        <div className="flex items-center gap-2 flex-wrap mb-4">
-          <span className="px-2 py-0.5 bg-black text-white text-xs rounded">
-            {article.category}
-          </span>
-          {article.tags.map((tag) => (
-            <span key={tag} className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded">
-              {tag}
-            </span>
-          ))}
-        </div>
+          {/* Series Badge */}
+          {article.series && (
+            <div className="mb-4 sm:mb-6">
+              <div className="inline-flex items-center bg-white/50 dark:bg-white/5 backdrop-blur-sm px-3 py-1.5">
+                <div 
+                  className="w-2 h-2 mr-2 animate-pulse"
+                  style={{ backgroundColor: seriesColor }}
+                />
+                <span 
+                  className="text-sm font-medium"
+                  style={{ color: seriesColor }}
+                >
+                  {article.series.name}
+                </span>
+              </div>
+            </div>
+          )}
 
-        {/* Title */}
-        <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-          {article.title}
-        </h1>
+          {/* Title */}
+          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-6 sm:mb-8 bg-gradient-to-br from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+            {article.title}
+          </h1>
 
-        {/* Date */}
-        <div className="flex items-center justify-end mb-8">
-          <span className="text-sm text-gray-600 dark:text-gray-400">
-            {new Date(article.publishedAt).toLocaleDateString()}
-          </span>
+          {/* Author Card */}
+          <div className="relative group">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 blur opacity-50 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
+            <div className="relative flex items-center gap-4 bg-white dark:bg-black p-4 sm:px-6 sm:py-4">
+              <img 
+                src={article.author.avatar} 
+                alt={article.author.name}
+                className="w-10 h-10 sm:w-12 sm:h-12 ring-2 ring-gray-900/5 dark:ring-white/5"
+              />
+              <div>
+                <div className="font-medium text-gray-900 dark:text-white">
+                  {article.author.name}
+                </div>
+                <time className="text-sm text-gray-500 dark:text-gray-400">
+                  {new Date(article.publishedAt).toLocaleDateString()}
+                </time>
+              </div>
+              <button 
+                onClick={() => setShowShareTooltip(!showShareTooltip)}
+                className="ml-auto p-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative"
+              >
+                <Share2 className="w-5 h-5" />
+                {showShareTooltip && (
+                  <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 shadow-lg py-2 px-4 text-sm whitespace-nowrap">
+                    Share this article
+                  </div>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-      
-      <div className="prose dark:prose-invert max-w-none">
-        {article.content}
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <div className="lg:grid lg:grid-cols-[300px_1fr] lg:gap-16">
+          {/* Desktop TOC */}
+          <aside className="hidden lg:block sticky top-24 h-fit mt-24">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 rounded-lg">
+              <TableOfContents />
+            </div>
+          </aside>
+
+          {/* Article Content */}
+          <div className="max-w-3xl">
+            <div className="prose dark:prose-invert prose-lg max-w-none">
+              <div 
+                dangerouslySetInnerHTML={{ 
+                  __html: article.content
+                    .replace(/^## (.*$)/gm, (_, title) => 
+                      `<h2 class="scroll-mt-20 text-2xl sm:text-3xl lg:text-4xl font-bold mt-12 sm:mt-16 mb-6 sm:mb-8 text-gray-900 dark:text-white" id="${createHeadingId(title)}">${title}</h2>`
+                    )
+                    .replace(/^### (.*$)/gm, (_, title) => 
+                      `<h3 class="scroll-mt-20 text-xl sm:text-2xl lg:text-3xl font-semibold mt-8 sm:mt-12 mb-4 sm:mb-6 text-gray-900 dark:text-white" id="${createHeadingId(title)}">${title}</h3>`
+                    )
+                    .replace(/^> (.*$)/gm, '<blockquote class="my-6 sm:my-8 bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 rounded-lg"><p class="text-gray-700 dark:text-gray-300 m-0">$1</p></blockquote>')
+                    .replace(/^([^:\n]+): ([^\n]+)$/gm, '<div class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-4 mb-3 sm:mb-4 rounded-lg"><strong class="text-gray-900 dark:text-white">$1:</strong> <span class="text-gray-700 dark:text-gray-300">$2</span></div>')
+                }} 
+              />
+            </div>
+
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2 mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-800">
+              {article.tags.map((tag) => (
+                <span 
+                  key={tag} 
+                  className="px-3 py-1.5 bg-white/50 dark:bg-white/5 backdrop-blur-sm text-gray-700 dark:text-gray-300 text-sm hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
-    </article>
+
+      {/* Mobile TOC Button */}
+      <button
+        onClick={() => setIsMobileMenuOpen(true)}
+        className="lg:hidden fixed bottom-6 right-6 z-50 p-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg hover:scale-110 transition-transform rounded-lg"
+        aria-label="Open table of contents"
+      >
+        <Menu className="w-6 h-6" />
+      </button>
+
+      {/* Mobile TOC Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div 
+            className="absolute inset-0 bg-gray-900/20 dark:bg-black/20 backdrop-blur-sm"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          <div className="absolute right-0 top-0 h-full w-72 bg-white dark:bg-gray-900 p-6">
+            <TableOfContents />
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

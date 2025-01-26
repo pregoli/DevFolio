@@ -66,7 +66,7 @@ function App() {
           onNavigate={setCurrentPage}
         />
         
-        <main className="container mx-auto px-4 py-8 flex-grow max-w-7xl">
+        <main className="container mx-auto px-4 sm:px-6 py-8 flex-grow max-w-7xl">
           {renderPage()}
         </main>
 
