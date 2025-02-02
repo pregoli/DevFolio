@@ -1,0 +1,122 @@
+/* Custom styles for Prism.js */
+:root {
+  --prism-background: #1e1e1e;
+  --prism-comment: #6a9955;
+  --prism-function: #dcdcaa;
+  --prism-keyword: #569cd6;
+  --prism-string: #ce9178;
+  --prism-number: #b5cea8;
+  --prism-class: #4ec9b0;
+  --prism-variable: #9cdcfe;
+}
+
+pre[class*="language-"] {
+  background: var(--prism-background);
+  margin: 0;
+  overflow: auto;
+  padding: 1rem;
+  border-radius: 0;
+}
+
+code[class*="language-"] {
+  color: #d4d4d4;
+  text-shadow: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  line-height: 1.5;
+  tab-size: 4;
+  font-size: 14px;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: var(--prism-comment);
+}
+
+.token.function {
+  color: var(--prism-function);
+}
+
+.token.keyword {
+  color: var(--prism-keyword);
+}
+
+.token.string {
+  color: var(--prism-string);
+}
+
+.token.number {
+  color: var(--prism-number);
+}
+
+.token.class-name {
+  color: var(--prism-class);
+}
+
+.token.property,
+.token.variable {
+  color: var(--prism-variable);
+}
+
+/* Line Numbers */
+pre[class*="language-"].line-numbers {
+  position: relative;
+  padding-left: 3.8em;
+  counter-reset: linenumber;
+}
+
+pre[class*="language-"].line-numbers > code {
+  position: relative;
+  white-space: inherit;
+}
+
+.line-numbers .line-numbers-rows {
+  position: absolute;
+  pointer-events: none;
+  top: 1rem;
+  font-size: 100%;
+  left: 0;
+  width: 3em;
+  letter-spacing: -1px;
+  border-right: 1px solid #404040;
+  user-select: none;
+}
+
+.line-numbers-rows > span {
+  display: block;
+  counter-increment: linenumber;
+}
+
+.line-numbers-rows > span:before {
+  content: counter(linenumber);
+  color: #505050;
+  display: block;
+  padding-right: 0.8em;
+  text-align: right;
+}
+
+/* VS Code-like scrollbar */
+pre[class*="language-"]::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+pre[class*="language-"]::-webkit-scrollbar-thumb {
+  background: #424242;
+  border: 4px solid var(--prism-background);
+  border-radius: 0;
+}
+
+pre[class*="language-"]::-webkit-scrollbar-thumb:hover {
+  background: #4f4f4f;
+}
+
+pre[class*="language-"]::-webkit-scrollbar-track {
+  background: transparent;
+}

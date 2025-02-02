@@ -15,7 +15,7 @@ export function Articles() {
         <div className="flex gap-2">
           <button
             onClick={() => setViewMode('grid')}
-            className={`p-2 rounded-lg ${
+            className={`p-2 ${
               viewMode === 'grid'
                 ? 'bg-gray-200 dark:bg-gray-700'
                 : 'hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -26,7 +26,7 @@ export function Articles() {
           </button>
           <button
             onClick={() => setViewMode('list')}
-            className={`p-2 rounded-lg ${
+            className={`p-2 ${
               viewMode === 'list'
                 ? 'bg-gray-200 dark:bg-gray-700'
                 : 'hover:bg-gray-100 dark:hover:bg-gray-800'

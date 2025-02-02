@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, Moon, Sun, Search, X } from 'lucide-react';
 import { MobileMenu } from './MobileMenu';
 import { SearchOverlay } from './SearchOverlay';
@@ -8,10 +9,9 @@ import { samplePosts } from '../data/samplePosts';
 interface HeaderProps {
   toggleDarkMode: () => void;
   isDarkMode: boolean;
-  onNavigate: (page: string) => void;
 }
 
-export function Header({ toggleDarkMode, isDarkMode, onNavigate }: HeaderProps) {
+export function Header({ toggleDarkMode, isDarkMode }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -53,12 +53,6 @@ export function Header({ toggleDarkMode, isDarkMode, onNavigate }: HeaderProps) 
     setIsSearching(false);
   };
 
-  const handleNavigation = (page: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    onNavigate(page);
-    window.history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
-  };
-
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b bg-white dark:bg-black border-gray-200 dark:border-gray-800">
@@ -71,13 +65,9 @@ export function Header({ toggleDarkMode, isDarkMode, onNavigate }: HeaderProps) 
               >
                 <Menu className="h-5 w-5 sm:h-6 sm:w-6 text-gray-900 dark:text-white" />
               </button>
-              <a 
-                href="/" 
-                onClick={(e) => handleNavigation('home', e)}
-                className="ml-2 sm:ml-4"
-              >
+              <Link to="/" className="ml-2 sm:ml-4">
                 <Logo />
-              </a>
+              </Link>
             </div>
             
             {/* Desktop Search */}
@@ -106,15 +96,15 @@ export function Header({ toggleDarkMode, isDarkMode, onNavigate }: HeaderProps) 
                   <div className="absolute w-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto">
                     {searchResults.length > 0 ? (
                       searchResults.map(post => (
-                        <a
+                        <Link
                           key={post.id}
-                          href={`/post/${post.slug}`}
+                          to={`/articles/${post.slug}`}
                           className="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700"
                           onClick={() => setIsSearching(false)}
                         >
                           <h3 className="font-medium text-gray-900 dark:text-white">{post.title}</h3>
                           <p className="text-sm text-gray-500 dark:text-gray-400">{post.excerpt.substring(0, 100)}...</p>
-                        </a>
+                        </Link>
                       ))
                     ) : (
                       <div className="p-4 text-gray-500 dark:text-gray-400">
@@ -154,11 +144,7 @@ export function Header({ toggleDarkMode, isDarkMode, onNavigate }: HeaderProps) 
 
       <MobileMenu 
         isOpen={isMobileMenuOpen} 
-        onClose={() => setIsMobileMenuOpen(false)} 
-        onNavigate={(page) => {
-          onNavigate(page);
-          setIsMobileMenuOpen(false);
-        }}
+        onClose={() => setIsMobileMenuOpen(false)}
       />
 
       <SearchOverlay 

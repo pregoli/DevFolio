@@ -28,7 +28,7 @@ export function Comments({ postId, comments }: CommentsProps) {
             value={authorName}
             onChange={(e) => setAuthorName(e.target.value)}
             placeholder="Your name"
-            className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             required
           />
         </div>
@@ -37,14 +37,14 @@ export function Comments({ postId, comments }: CommentsProps) {
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Write a comment..."
-            className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             rows={4}
             required
           />
         </div>
         <button
           type="submit"
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="px-6 py-2 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           Post Comment
         </button>
@@ -52,7 +52,7 @@ export function Comments({ postId, comments }: CommentsProps) {
 
       <div className="space-y-6">
         {comments.map((comment) => (
-          <div key={comment.id} className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+          <div key={comment.id} className="bg-gray-50 dark:bg-gray-800 p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="font-semibold dark:text-white">{comment.author}</span>
               <span className="text-sm text-gray-500 dark:text-gray-400">
