@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Header } from './components/Header';
-import { Newsletter } from './components/Newsletter';
 import { SocialLinks } from './components/SocialLinks';
 import { useDarkMode } from './hooks/useDarkMode';
 import { Articles } from './pages/Articles';

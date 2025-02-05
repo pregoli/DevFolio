@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { samplePosts } from '../data/samplePosts';
 import { series } from '../data/series';
 import { SEO } from '../components/SEO';
 import { CodeSnippet } from '../components/CodeSnippet';
 import { TableOfContents } from '../components/TableOfContents';
+import { ArticleComments } from '../components/ArticleComments';
 import type { Post } from '../types';
 import { Menu, Clock, Share2 } from 'lucide-react';
 
 export function ArticleDetail() {
   const { slug } = useParams();
+  const location = useLocation();
   const [article, setArticle] = useState<Post | null>(null);
   const [activeSection, setActiveSection] = useState<string>('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -207,6 +209,9 @@ export function ArticleDetail() {
                 </span>
               ))}
             </div>
+
+            {/* Comments Section */}
+            <ArticleComments pathname={location.pathname} />
           </div>
         </div>
       </div>
