@@ -22,4 +22,18 @@ export const series: Series[] = [
     description: 'Best practices in API design and implementation',
     color: '#45B7D1',
   },
+  {
+    id: '4',
+    name: 'DOT NET',
+    slug: 'dot-net',
+    description: 'Everything about the DOT NET world',
+    color: '#007FFF',
+  },
+  {
+    id: '5',
+    name: 'Software Architecture',
+    slug: 'software-architecture',
+    description: 'Patterns & practices about distributed applications design and development',
+    color: '#900ca9',
+  },
 ];

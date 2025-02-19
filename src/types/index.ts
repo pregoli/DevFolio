@@ -22,8 +22,6 @@ export interface Post {
   series?: {
     id: string;
     name: string;
-    partNumber: number;
-    totalParts: number;
   };
 }
 

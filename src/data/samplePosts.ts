@@ -113,20 +113,36 @@ Groups of related objects treated as a unit:
 > An Order (aggregate root) containing multiple OrderItems is a perfect example of an aggregate.`,
     publishedAt: '2024-03-15',
     author: {
-      name: 'John Doe',
+      name: 'Paolo Regoli',
       avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop',
     },
     tags: ['DDD', 'Architecture', 'Best Practices'],
     category: 'Architecture',
     series: {
       id: '1',
-      name: 'Domain-Driven Design',
-      partNumber: 1,
-      totalParts: 5,
+      name: 'Domain-Driven Design'
     },
   },
   {
     id: '2',
+    title: 'Orchestration VS Coreography',
+    slug: 'event-driven-architecture',
+    excerpt: 'With orchestration, a central controller coordinates the interactions among services..',
+    content: '...',
+    publishedAt: '2024-03-14',
+    author: {
+      name: 'Paolo Regoli',
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
+    },
+    tags: ['Event-Driven', 'Architecture', '.NET'],
+    category: 'Architecture',
+    series: {
+      id: '2',
+      name: 'Event-Driven Architecture'
+    },
+  },
+  {
+    id: '3',
     title: 'Aggregate in DDD: What, Why, How',
     slug: 'ddd-aggregates',
     excerpt: 'Master the concept of Aggregates in Domain-Driven Design and learn how to effectively implement them in your applications.',
@@ -345,36 +361,32 @@ Aggregates and aggregate roots are practical constructs that help manage complex
 Additionally, by following best practices such as keeping aggregates small, designing for eventual consistency, protecting invariants, and adhering to core DDD principles, you ensure that your domain model is both effective and adaptable. We hope this article helps you understand how to design and implement aggregates using DDD. Happy coding, and enjoy building systems that truly reflect your domain!`,
     publishedAt: '2024-03-16',
     author: {
-      name: 'John Doe',
+      name: 'Paolo Regoli',
       avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop',
     },
     tags: ['DDD', 'Best Practices'],
     category: 'Architecture',
     series: {
       id: '1',
-      name: 'Domain-Driven Design',
-      partNumber: 2,
-      totalParts: 5,
+      name: 'Domain-Driven Design'
     },
   },
   {
-    id: '3',
-    title: 'Event-Driven Architecture: Patterns and Best Practices',
+    id: '4',
+    title: 'Event-Driven Architecture: Patterns % Practices',
     slug: 'event-driven-architecture',
     excerpt: 'Exploring the fundamentals of event-driven architecture and its implementation...',
     content: '...',
     publishedAt: '2024-03-14',
     author: {
-      name: 'Jane Smith',
+      name: 'Paolo Regoli',
       avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
     },
     tags: ['Event-Driven', 'Architecture', '.NET'],
     category: 'Architecture',
     series: {
       id: '2',
-      name: 'Event-Driven Architecture',
-      partNumber: 1,
-      totalParts: 3,
+      name: 'Event-Driven Architecture'
     },
   },
   {
@@ -385,66 +397,32 @@ Additionally, by following best practices such as keeping aggregates small, desi
     content: '...',
     publishedAt: '2024-03-13',
     author: {
-      name: 'Mike Johnson',
+      name: 'Paolo Regoli',
       avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
     },
-    tags: ['Microservices', 'Architecture', 'API Design', 'Integration'],
+    tags: ['Microservices', 'Integration'],
     category: 'Architecture',
+    series: {
+      id: '5',
+      name: 'Software Architecture'
+    },
   },
   {
-    id: '5',
-    title: 'Advanced TypeScript Design Patterns',
-    slug: 'typescript-patterns',
-    excerpt: 'Exploring advanced TypeScript patterns and best practices for large-scale applications...',
+    id: '4',
+    title: 'Message broker VS Event broker',
+    slug: 'event-driven-architecture',
+    excerpt: 'In a microservices landscape, a message broker handles targeted...',
     content: '...',
-    publishedAt: '2024-03-12',
+    publishedAt: '2024-03-14',
     author: {
-      name: 'Sarah Wilson',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+      name: 'Paolo Regoli',
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
     },
-    tags: ['TypeScript', 'Design Patterns', 'JavaScript', 'Best Practices'],
-    category: 'Development',
-  },
-  {
-    id: '6',
-    title: 'Building Scalable React Applications',
-    slug: 'scalable-react',
-    excerpt: 'Learn how to structure and scale your React applications for enterprise use...',
-    content: '...',
-    publishedAt: '2024-03-11',
-    author: {
-      name: 'Alex Chen',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+    tags: ['Event-Driven', 'Architecture', '.NET'],
+    category: 'Architecture',
+    series: {
+      id: '2',
+      name: 'Event-Driven Architecture'
     },
-    tags: ['React', 'JavaScript', 'Performance', 'Architecture'],
-    category: 'Development',
-  },
-  {
-    id: '7',
-    title: 'Cloud Native Development Best Practices',
-    slug: 'cloud-native-practices',
-    excerpt: 'Essential practices for developing cloud-native applications...',
-    content: '...',
-    publishedAt: '2024-03-10',
-    author: {
-      name: 'Emma Davis',
-      avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&h=100&fit=crop',
-    },
-    tags: ['Cloud', 'DevOps', 'Kubernetes', 'Docker'],
-    category: 'DevOps',
-  },
-  {
-    id: '8',
-    title: 'GraphQL vs REST: Making the Right Choice',
-    slug: 'graphql-vs-rest',
-    excerpt: 'A comprehensive comparison of GraphQL and REST APIs for modern applications...',
-    content: '...',
-    publishedAt: '2024-03-09',
-    author: {
-      name: 'Tom Brown',
-      avatar: 'https://images.unsplash.com/photo-1463453091185-61582044d556?w=100&h=100&fit=crop',
-    },
-    tags: ['GraphQL', 'REST', 'API Design', 'Backend'],
-    category: 'Backend',
   }
 ];
